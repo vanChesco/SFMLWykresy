@@ -8,7 +8,7 @@ int main()
 
 	const float M_PI = (float)acos(-1);																	// Definicja stalej PI
 	float x, y;																							// Zmienne do obliczania wykresu
-	int scaleY{ 100 }, scaleX{ 1 };																		// Zmienne do skalowania
+	int scaleY{ 400 }, scaleX{ 1 };																		// Zmienne do skalowania
 	int sX{ 6 }, sY{ 6 };																				// Liczba podzialek na osi X
 
 	bool pokaz_kolko{ false };																			// Przelacznik widocznosci kolka
@@ -38,8 +38,9 @@ int main()
 		grotY[1].position = sf::Vector2f(20.f - 4.f, 40.f);												// 
 		grotY[2].position = sf::Vector2f(20.f + 4.f, 40.f);												// 
 
-	sf::CircleShape kolko(30); 
-	kolko.setFillColor(sf::Color::Red);
+	sf::CircleShape kolko(10); 
+	kolko.setPosition(1890, 0);
+	kolko.setFillColor(sf::Color::Green);
 
 	sf::CircleShape* punkty = new sf::CircleShape[resX]; 
 	sf::CircleShape* xy = punkty;
@@ -65,6 +66,9 @@ int main()
 			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Subtract) scaleY--;
 			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Multiply) scaleX++;
 			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Divide) scaleX--;
+
+																												//???????????????????????????????
+
 		}
 
 		// Rysowanie aktualnej klatki ///////////////////////////////////////////////////
@@ -106,6 +110,13 @@ int main()
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) kolko.move(-20, 0);
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) kolko.move(0, -20);
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) kolko.move(0, 20);
+
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))												//???????????????????????????????
+		{																										//???????????????????????????????
+			window.draw(kolko);																					//???????????????????????????????
+			scaleX = event.mouseMove.x;																			//???????????????????????????????
+			scaleY = event.mouseMove.y;
+		}
 
 		for (int i = 0; i < resX; i++)																			// Rysowanie wykresu punkt po punkcie
 		{
