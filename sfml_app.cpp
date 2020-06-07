@@ -6,7 +6,7 @@ int main()
 {
 	const int resX{ 1920 }, resY{ 1080 };																// Deklaracja rozdzielczosci
 
-	const float M_PI = (float)acos(-1);																		// Definicja stalej PI
+	const float M_PI = (float)acos(-1);																	// Definicja stalej PI
 	float x, y;																							// Zmienne do obliczania wykresu
 	int scaleY{ 100 }, scaleX{ 1 };																		// Zmienne do skalowania
 	int sX{ 6 }, sY{ 6 };																				// Liczba podzialek na osi X
@@ -24,24 +24,26 @@ int main()
 		osX[0].position = sf::Vector2f(20.f, float(0.5) * resY);										// 
 		osX[1].position = sf::Vector2f(float(resX) - 20.0f, float(0.5 * resY));							// 
 
+	sf::VertexArray osY(sf::Lines, 2);																	// Linia osi Y
+		osY[0].position = sf::Vector2f(20.f, 20.f);														// 
+		osY[1].position = sf::Vector2f(20.f, float(resY) - 20.0f);										// 
+
 	sf::VertexArray grotX(sf::Triangles, 3);															// Grot osi X
 		grotX[0].position = sf::Vector2f(float(resX) - 20.f, float(0.5 * resY));						// 
 		grotX[1].position = sf::Vector2f(float(resX) - 40.f, float(0.5 * resY) - 4.f);					// 
 		grotX[2].position = sf::Vector2f(float(resX) - 40.f, float(0.5 * resY) + 4.f);					// 
-
-	sf::VertexArray osY(sf::Lines, 2);																	// Linia osi Y
-		osY[0].position = sf::Vector2f(20.f, 20.f);														// 
-		osY[1].position = sf::Vector2f(20.f, float(resY) - 20.0f);										// 
 
 	sf::VertexArray grotY(sf::Triangles, 3);															// Grot osi Y
 		grotY[0].position = sf::Vector2f(20.f, 20.f);													// 
 		grotY[1].position = sf::Vector2f(20.f - 4.f, 40.f);												// 
 		grotY[2].position = sf::Vector2f(20.f + 4.f, 40.f);												// 
 
-	sf::CircleShape kolko(30); kolko.setFillColor(sf::Color::Red);
+	sf::CircleShape kolko(30); 
+	kolko.setFillColor(sf::Color::Red);
 
 	sf::CircleShape* punkty = new sf::CircleShape[resX]; 
 	sf::CircleShape* xy = punkty;
+
 
 
 
