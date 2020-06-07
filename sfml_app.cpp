@@ -13,7 +13,8 @@ int main()
 
 	bool pokaz_kolko{ false };																			// Przelacznik widocznosci kolka
 
-
+	sf::Font czcionka;
+	czcionka.loadFromFile("C:\\Windows\\Fonts\\Arial.ttf");
 
 	sf::RenderWindow window(sf::VideoMode(resX, resY, 32), "SFML Wykresy", sf::Style::Fullscreen);		// Utworzenie okna programu
 		window.setMouseCursorVisible(false);															// Wylaczenie kursora
@@ -66,10 +67,9 @@ int main()
 			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Subtract) scaleY--;
 			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Multiply) scaleX++;
 			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Divide) scaleX--;
-
-																												//???????????????????????????????
-
 		}
+
+		sX = 4*(resX - 40 + scaleX)/(resX - 40);
 
 		// Rysowanie aktualnej klatki ///////////////////////////////////////////////////
 
@@ -78,13 +78,22 @@ int main()
 		window.draw(grotX); window.draw(grotY);
 
 		sf::VertexArray* podzX = new sf::VertexArray[sX+1];
+		sf::Text* eX = new sf::Text[sX + 1];
 
 		for (int i = 0; i < sX; i++)
 		{
 			(podzX + i)->setPrimitiveType(sf::Lines); 
 			(podzX + i)->append(sf::Vector2f(20.0f + (float)i * ((float)resX - 40.0f + (float)scaleX) / (float)sX, 0.5f * (float)resY));
 			(podzX + i)->append(sf::Vector2f(20.0f + (float)i * ((float)resX - 40.0f + (float)scaleX) / (float)sX, 0.5f * (float)resY + 10.0f));
+
+//			(eX + i)->setColor(sf::Color::White);
+			(eX + i)->setString(std::to_string(i*360/sX));
+			(eX + i)->setFont(czcionka);
+			(eX + i)->setCharacterSize(12);
+			(eX + i)->setPosition(sf::Vector2f(20.0f + (float)i * ((float)resX - 40.0f + (float)scaleX) / (float)sX, 0.5f * (float)resY + 15.0f));
+
 			window.draw(*(podzX + i));
+			window.draw(*(eX + i));
 		}
 
 		sf::VertexArray* podzY = new sf::VertexArray[2 * sY];
@@ -134,6 +143,7 @@ int main()
 
 		delete[] podzX;
 		delete[] podzY;
+		delete[] eX;
 	}
 
 	return 0;
