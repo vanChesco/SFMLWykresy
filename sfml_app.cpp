@@ -9,8 +9,9 @@ int main()
 	const float M_PI = (float)acos(-1);																	// Definicja stalej PI
 	float x, y;																							// Zmienne do obliczania wykresu
 	int scaleY{ 400 }, scaleX{ 1 };																		// Zmienne do skalowania
+	float dX, dY;																						// Dlugosc jednej dzialki
 	int sX{ 6 }, sY{ 6 };																				// Liczba podzialek na osi X
-	float uX{ 0.5f * M_PI }, uY{ 1 };																	// Jednostki osi
+	float uX{ 0.25f * M_PI }, uY{ 0.5 };																	// Jednostki osi
 	float xm{ 2 * M_PI }, ym{ 2 };																		// Wartosci mx osi
 
 	bool pokaz_kolko{ false };																			// Przelacznik widocznosci kolka
@@ -71,10 +72,7 @@ int main()
 			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Divide) scaleX--;
 		}
 
-//		sX = (resX - 40 + scaleX)/(resX - 40);
 
-
-		float dX;
 
 
 
@@ -84,8 +82,11 @@ int main()
 		window.draw(osX); window.draw(osY);
 		window.draw(grotX); window.draw(grotY);
 
-		dX = (resX + scaleX) * uX / (xm);
-		sX = resX / dX;
+		dX = (resX - 40 + scaleX) * uX / (xm);
+		sX = 1 + resX / dX;
+
+		dY = (0.5*(resY - 40) + scaleY) * uY / (ym);
+		sY = 1 + resY / dY;
 
 		sf::VertexArray* podzX = new sf::VertexArray[sX+1];
 		sf::Text* eX = new sf::Text[sX + 1];
@@ -97,7 +98,7 @@ int main()
 			(podzX + i)->append(sf::Vector2f(20.0f + (float)i * dX, 0.5f * (float)resY + 10.0f));
 
 //			(eX + i)->setColor(sf::Color::White);
-			(eX + i)->setString(std::to_string(i*uX));
+			(eX + i)->setString(std::to_string(int(i * uX * 180/M_PI)));
 			(eX + i)->setFont(czcionka);
 			(eX + i)->setCharacterSize(12);
 			(eX + i)->setPosition(sf::Vector2f(20.0f + (float)i * dX, 0.5f * (float)resY + 15.0f));
@@ -143,7 +144,7 @@ int main()
 			(xy + i) -> setFillColor(sf::Color::Red);
 
 			x = 2.f * M_PI * (float(i) - 20.f) / ((float(resX) - 40.f) + (float)scaleX);
-			y = sin(x);																				// Formula do wyswietlenia
+			y = sin(2*x);																				// Formula do wyswietlenia
 
 			(xy + i) -> setPosition(sf::Vector2f((float)i, -(float)scaleY * y + 0.5f * (float)resY));
 			window.draw(*(xy + i));
