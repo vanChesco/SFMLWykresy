@@ -100,22 +100,22 @@ int main()
 
 
 		sf::VertexArray osX(sf::Lines, 2);																		// Linia osi X
-		osX[0].position = sf::Vector2f(margX, axisOrigin.y);													// 
-		osX[1].position = sf::Vector2f(float(resX) - margX, axisOrigin.y);										// 
+			osX[0].position = sf::Vector2f(margX, axisOrigin.y);												// 
+			osX[1].position = sf::Vector2f(float(resX) - margX, axisOrigin.y);									// 
 
 		sf::VertexArray osY(sf::Lines, 2);																		// Linia osi Y
-		osY[0].position = sf::Vector2f(axisOrigin.x, margY);													// 
-		osY[1].position = sf::Vector2f(axisOrigin.x, float(resY) - margY);										// 
+			osY[0].position = sf::Vector2f(axisOrigin.x, margY);												// 
+			osY[1].position = sf::Vector2f(axisOrigin.x, float(resY) - margY);									// 
 
 		sf::VertexArray grotX(sf::Triangles, 3);																// Grot osi X
-		grotX[0].position = sf::Vector2f(float(resX) - margX, axisOrigin.y);									// 
-		grotX[1].position = sf::Vector2f(float(resX) - margX - 20.f, axisOrigin.y - 4.f);						// 
-		grotX[2].position = sf::Vector2f(float(resX) - margX - 20.f, axisOrigin.y + 4.f);						// 
+			grotX[0].position = sf::Vector2f(float(resX) - margX, axisOrigin.y);								// 
+			grotX[1].position = sf::Vector2f(float(resX) - margX - 20.f, axisOrigin.y - 4.f);					// 
+			grotX[2].position = sf::Vector2f(float(resX) - margX - 20.f, axisOrigin.y + 4.f);					// 
 
 		sf::VertexArray grotY(sf::Triangles, 3);																// Grot osi Y
-		grotY[0].position = sf::Vector2f(axisOrigin.x, margY);													// 
-		grotY[1].position = sf::Vector2f(axisOrigin.x - 4.f, margY + 20.f);										// 
-		grotY[2].position = sf::Vector2f(axisOrigin.x + 4.f, margY + 20.f);										// 
+			grotY[0].position = sf::Vector2f(axisOrigin.x, margY);												// 
+			grotY[1].position = sf::Vector2f(axisOrigin.x - 4.f, margY + 20.f);									// 
+			grotY[2].position = sf::Vector2f(axisOrigin.x + 4.f, margY + 20.f);									// 
 
 
 		dX = (resX - 2 * margX + scaleX) * uX / (x_max);														//todo Gdzies tu dochodzi do dzielenia przez 0
@@ -138,45 +138,44 @@ int main()
 		window.draw(grotX); window.draw(grotY);
 
 
-		sf::VertexArray* podzX = new sf::VertexArray[iloscPodzialekX + 1];
-		sf::Text* eX = new sf::Text[iloscPodzialekX + 1];
+		sf::VertexArray* podzX = new sf::VertexArray[iloscPodzialekX + 1];										// Rysowanie podzialek na osi X
+		sf::Text* eX = new sf::Text[iloscPodzialekX + 1];														// 
 
-		for (int i = 0; i <= iloscPodzialekX; i++)
-		{
-			(podzX + i)->setPrimitiveType(sf::Lines); 
-			(podzX + i)->append(sf::Vector2f(axisOrigin.x + (float)xpmin * dX, axisOrigin.y));
-			(podzX + i)->append(sf::Vector2f(axisOrigin.x + (float)xpmin * dX, axisOrigin.y + 10.0f));
+		for (int i = 0; i <= iloscPodzialekX; i++)																// 
+		{																										// 
+			(podzX + i)->setPrimitiveType(sf::Lines); 															// 
+			(podzX + i)->append(sf::Vector2f(axisOrigin.x + (float)xpmin * dX, axisOrigin.y));					// 
+			(podzX + i)->append(sf::Vector2f(axisOrigin.x + (float)xpmin * dX, axisOrigin.y + 10.0f));			// 
 
-			(eX + i)->setString(std::to_string(int(xpmin * uX * 180/M_PI)));
-			(eX + i)->setFont(czcionka);
-			(eX + i)->setCharacterSize(12);
-			(eX + i)->setPosition(sf::Vector2f(axisOrigin.x + (float)xpmin * dX, axisOrigin.y + 15.0f));
+			(eX + i)->setString(std::to_string(int(xpmin * uX * 180/M_PI)));									// 
+			(eX + i)->setFont(czcionka);																		// 
+			(eX + i)->setCharacterSize(12);																		// 
+			(eX + i)->setPosition(sf::Vector2f(axisOrigin.x + (float)xpmin * dX, axisOrigin.y + 15.0f));		// 
 
-			window.draw(*(podzX + i));
-			window.draw(*(eX + i));
-			xpmin++;
+			window.draw(*(podzX + i));																			// 
+			window.draw(*(eX + i));																				// 
+			xpmin++;																							// 
 		}
 
 
-		sf::VertexArray* podzY = new sf::VertexArray[iloscPodzialekY + 1];
-		sf::Text* eY = new sf::Text[iloscPodzialekY + 1];
+		sf::VertexArray* podzY = new sf::VertexArray[iloscPodzialekY + 1];										// Rysowanie podzialek na osi Y
+		sf::Text* eY = new sf::Text[iloscPodzialekY + 1];														// 
 
+		for (int i = 0; i <= iloscPodzialekY; i++)																// 
+		{																										// 
+			(podzY + i)->setPrimitiveType(sf::Lines);															// 
+			(podzY + i)->append(sf::Vector2f(axisOrigin.x, axisOrigin.y - ypmax * dY));							// 
+			(podzY + i)->append(sf::Vector2f(axisOrigin.x + 10.f, axisOrigin.y - ypmax * dY));					// 
 
-			for (int i = 0; i <= iloscPodzialekY; i++)
-			{
-				(podzY + i)->setPrimitiveType(sf::Lines);
-				(podzY + i)->append(sf::Vector2f(axisOrigin.x, axisOrigin.y - ypmax * dY));
-				(podzY + i)->append(sf::Vector2f(axisOrigin.x + 10.f, axisOrigin.y - ypmax * dY));
-				
-				(eX + i)->setString(std::to_string(ypmax));
-				(eX + i)->setFont(czcionka);
-				(eX + i)->setCharacterSize(12);
-				(eX + i)->setPosition(sf::Vector2f(axisOrigin.x + 15, axisOrigin.y - ypmax * dY));
+			(eX + i)->setString(std::to_string(ypmax));															// 
+			(eX + i)->setFont(czcionka);																		// 
+			(eX + i)->setCharacterSize(12);																		// 
+			(eX + i)->setPosition(sf::Vector2f(axisOrigin.x + 15, axisOrigin.y - ypmax * dY));					// 
 
-				window.draw(*(podzY + i));
-				window.draw(*(eX + i));
-				ypmax--;
-			}
+			window.draw(*(podzY + i));																			// 
+			window.draw(*(eX + i));																				// 
+			ypmax--;																							// 
+		}
 
 			int fmax = 20;
 		for (int i = 0; i < resX; i++)																			// Rysowanie wykresu punkt po punkcie
