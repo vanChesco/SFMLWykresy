@@ -10,6 +10,8 @@ int main()
 	float x, y;																							// Zmienne do obliczania wykresu
 	int scaleY{ 400 }, scaleX{ 1 };																		// Zmienne do skalowania
 	int sX{ 6 }, sY{ 6 };																				// Liczba podzialek na osi X
+	float uX{ 0.5f * M_PI }, uY{ 1 };																	// Jednostki osi
+	float xm{ 2 * M_PI }, ym{ 2 };																		// Wartosci mx osi
 
 	bool pokaz_kolko{ false };																			// Przelacznik widocznosci kolka
 
@@ -69,7 +71,12 @@ int main()
 			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Divide) scaleX--;
 		}
 
-		sX = 4*(resX - 40 + scaleX)/(resX - 40);
+//		sX = (resX - 40 + scaleX)/(resX - 40);
+
+
+		float dX;
+
+
 
 		// Rysowanie aktualnej klatki ///////////////////////////////////////////////////
 
@@ -77,20 +84,23 @@ int main()
 		window.draw(osX); window.draw(osY);
 		window.draw(grotX); window.draw(grotY);
 
+		dX = (resX + scaleX) * uX / (xm);
+		sX = resX / dX;
+
 		sf::VertexArray* podzX = new sf::VertexArray[sX+1];
 		sf::Text* eX = new sf::Text[sX + 1];
 
 		for (int i = 0; i < sX; i++)
 		{
 			(podzX + i)->setPrimitiveType(sf::Lines); 
-			(podzX + i)->append(sf::Vector2f(20.0f + (float)i * ((float)resX - 40.0f + (float)scaleX) / (float)sX, 0.5f * (float)resY));
-			(podzX + i)->append(sf::Vector2f(20.0f + (float)i * ((float)resX - 40.0f + (float)scaleX) / (float)sX, 0.5f * (float)resY + 10.0f));
+			(podzX + i)->append(sf::Vector2f(20.0f + (float)i * dX, 0.5f * (float)resY));
+			(podzX + i)->append(sf::Vector2f(20.0f + (float)i * dX, 0.5f * (float)resY + 10.0f));
 
 //			(eX + i)->setColor(sf::Color::White);
-			(eX + i)->setString(std::to_string(i*360/sX));
+			(eX + i)->setString(std::to_string(i*uX));
 			(eX + i)->setFont(czcionka);
 			(eX + i)->setCharacterSize(12);
-			(eX + i)->setPosition(sf::Vector2f(20.0f + (float)i * ((float)resX - 40.0f + (float)scaleX) / (float)sX, 0.5f * (float)resY + 15.0f));
+			(eX + i)->setPosition(sf::Vector2f(20.0f + (float)i * dX, 0.5f * (float)resY + 15.0f));
 
 			window.draw(*(podzX + i));
 			window.draw(*(eX + i));
@@ -133,7 +143,7 @@ int main()
 			(xy + i) -> setFillColor(sf::Color::Red);
 
 			x = 2.f * M_PI * (float(i) - 20.f) / ((float(resX) - 40.f) + (float)scaleX);
-			y = sin(x*sin(2*x));																				// Formula do wyswietlenia
+			y = sin(x);																				// Formula do wyswietlenia
 
 			(xy + i) -> setPosition(sf::Vector2f((float)i, -(float)scaleY * y + 0.5f * (float)resY));
 			window.draw(*(xy + i));
