@@ -164,7 +164,7 @@ int main()
 			count_x++;
 		}
 
-		iloscPodzialekY = int(LY/dY);  std::cout << iloscPodzialekY << " | " << scaleY << '\n';
+		iloscPodzialekY = int(LY/dY);
 		int count_y = int(axisOrigin.y / dY);
 
 		sf::VertexArray* podzY = new sf::VertexArray[iloscPodzialekY + 1];										// Rysowanie podzialek na osi Y
@@ -192,9 +192,9 @@ int main()
 		for (int i = 0; i < resX; i++)																			// Rysowanie wykresu punkt po punkcie
 		{
 			x = (x_max - x_min) * (float(i) - axisOrigin.x) / (scaleX * LX);
-			//y = sin(x * sin(2 * x));
+			y = sin(x * sin(2 * x));
 			
-			y = y = sin((2 * M_PI / ((1 - 1 / fmax) * x + 2 * M_PI / fmax)) * x) * (2 * M_PI / ((1 - 1 / fmax) * x + 2 * M_PI / fmax)) / fmax;				// Formula do wyswietlenia
+			//y = y = sin((2 * M_PI / ((1 - 1 / fmax) * x + 2 * M_PI / fmax)) * x) * (2 * M_PI / ((1 - 1 / fmax) * x + 2 * M_PI / fmax)) / fmax;				// Formula do wyswietlenia
 
 			(xy + i) -> setRadius(1);
 			(xy + i) -> setFillColor(sf::Color::Red);
@@ -204,9 +204,9 @@ int main()
 
 		window.display();
 
-		std::cout << "Przeciecie ukladu wspolrzednych" << "\t\t" << '\n';
-		std::cout << "x: " << axisOrigin.x << "\ty: " << axisOrigin.y << '\n';
-		std::cout << "Skala X: " << /*scaleX <<*/ ", Skala Y: " << scaleY << '\n';
+		//std::cout << "Przeciecie ukladu wspolrzednych" << "\t\t" << '\n';
+		//std::cout << "x: " << axisOrigin.x << "\ty: " << axisOrigin.y << '\n';
+		//std::cout << "Skala X: " << /*scaleX <<*/ ", Skala Y: " << scaleY << '\n';
 
 		delete[] podzX;
 		delete[] podzY;
