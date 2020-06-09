@@ -5,37 +5,31 @@
 int main()
 {
 	const int resX{ 1920 }, resY{ 1200 };																			// Deklaracja rozdzielczosci
-
-	sf::ContextSettings settings;																					// Ustawienie antyaliasingu
-		settings.antialiasingLevel = 16;
-	
 	float margX{ 20 }, margY{ 20 };																					// Marginesy
+	float LX = resX - 2 * margX, LY = resY - 2 * margY;																// Docelowa dlugosc osi w pikselach
+
 
 	const float M_PI = (float)acos(-1);																				// Definicja stalej PI
 	float x, y;																										// Zmienne do obliczania wykresu
-	int scaleY{ 2 }, scaleX{ 1 };																					// Zmienne do skalowania
-	int iloscPodzialekX{ 6 }, iloscPodzialekY{ 6 };																	// Liczba podzialek na osi X
-	float uX{ 1.0f * M_PI }, uY{ 2 };																				// Jednostki osi
-	float x_max{ 4.f * M_PI }, y_max{ 2.f };																		// Wartosci mx osi
-	float x_min{ -0.1f * M_PI }, y_min{ -2.f };																		// Wartosci mx osi
+	int iloscPodzialekX{ 0 }, iloscPodzialekY{ 0 };																	// Liczba podzialek na osi X
+	float uX{ 1 * M_PI }, uY{ 1 };																					// Jednostki osi
+	float x_max{ 4 * M_PI }, y_max{ 2.f };																			// Wartosci max osi
+	float x_min{ -1 * M_PI }, y_min{ -1.f };																		// Wartosci min osi
 
-	float dX = (resX - 2 * margX) / (x_max - x_min);				
-	float dY = (resY - 2 * margY) / (y_max - y_min);																// Dlugosc jednej dzialki
 
-	float xo = dX * (-x_min);
-	float yo = dY * (-y_min);
+	sf::Vector2f axisOrigin{ -x_min * LX / (x_max-x_min), y_max * LY / (y_max - y_min) };							// Punkt skrzyzowania osi
+	float scaleY{ 1 }, scaleX{ 1 };																					// Wspolczynniki skalowania
 
-	sf::Vector2f axisOrigin{ xo, yo };																				// Punkt skrzyzowania osi
 
 	bool pokaz_kolko{ false };																						// Przelacznik widocznosci kolka
-
-
 
 
 	sf::Font czcionka;
 		czcionka.loadFromFile("C:\\Windows\\Fonts\\Arial.ttf");
 	
 
+	sf::ContextSettings settings;																					// Ustawienie antyaliasingu
+		settings.antialiasingLevel = 16;
 
 	sf::RenderWindow window(sf::VideoMode(resX, resY, 32), "SFML Wykresy", sf::Style::Fullscreen, settings);		// Utworzenie okna programu
 		window.setMouseCursorVisible(false);																		// Wylaczenie kursora
@@ -48,7 +42,6 @@ int main()
 
 	sf::CircleShape* punkty = new sf::CircleShape[resX]; 
 	sf::CircleShape* xy = punkty;
-
 
 
 
@@ -66,13 +59,13 @@ int main()
 			if (event.type == sf::Event::Closed) window.close();
 			if (event.type == sf::Event::KeyPressed && (event.key.code == sf::Keyboard::Escape || event.key.code == sf::Keyboard::Space)) window.close();
 			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::K) pokaz_kolko = !pokaz_kolko;
-			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Add) scaleY+=10;
-			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Subtract) scaleY-=10;
-			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Multiply) scaleX+=10;
-			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Divide) scaleX-=10;
+			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Add) scaleX*=1.1f;
+			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Subtract) scaleX*=0.9f;
+			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Multiply) scaleY*=1.1f;
+			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Divide) scaleY*=0.9f;
 
-			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Numpad8) axisOrigin.y+=10;
-			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Numpad2) axisOrigin.y-=10; 
+			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Numpad2) axisOrigin.y+=10; 
+			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Numpad8) axisOrigin.y-=10;
 			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Numpad6) axisOrigin.x+=10;
 			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Numpad4) axisOrigin.x-=10;
 			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Numpad8 && event.key.code == sf::Keyboard::LShift) axisOrigin.y += 100.f;			// ???????????????????????
@@ -91,12 +84,25 @@ int main()
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) kolko.move(0, -20);
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) kolko.move(0, 20);
 
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))												//???????????????????????????????
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl))												//???????????????????????????????
 		{																										//???????????????????????????????
 			window.draw(kolko);																					//???????????????????????????????
-			scaleX = event.mouseMove.x;																			//???????????????????????????????
-			scaleY = event.mouseMove.y;
+			//scaleX = event.mouseMove.x;																			//???????????????????????????????
+			//scaleY = event.mouseMove.y;
+			scaleX += 0.01*event.mouseWheelScroll.delta;
+			scaleY += 0.01 * event.mouseWheelScroll.delta;
 		}
+
+		if ( sf::Mouse::isButtonPressed(sf::Mouse::Left))
+		{
+			axisOrigin.x += 0.01 * event.mouseMove.x;
+			axisOrigin.y += 0.01 * event.mouseMove.y;
+		}
+
+
+
+
+
 
 
 		sf::VertexArray osX(sf::Lines, 2);																		// Linia osi X
@@ -118,17 +124,6 @@ int main()
 			grotY[2].position = sf::Vector2f(axisOrigin.x + 4.f, margY + 20.f);									// 
 
 
-		dX = (resX - 2 * margX + scaleX) * uX / (x_max);														//todo Gdzies tu dochodzi do dzielenia przez 0
-		int xpmin = int(-axisOrigin.x/dX);																		// ilosc podzialek na minusie
-		int xpmax = int((resX - margX - axisOrigin.x) / dX);
-		iloscPodzialekX = xpmax - xpmin;
-
-		dY = (resY - 2 * margY + scaleY) * uY / (y_max- y_min); 
-		int ypmin = -1 * int((resY - margY - axisOrigin.y )/ (int)dY);											// ilosc podzialek na minusie
-		int ypmax = int((axisOrigin.y - margY) / dY);
-		iloscPodzialekY = ypmax - ypmin;
-	
-
 
 
 		// Rysowanie aktualnej klatki ///////////////////////////////////////////////////
@@ -137,6 +132,11 @@ int main()
 		window.draw(osX); window.draw(osY);
 		window.draw(grotX); window.draw(grotY);
 
+		float dX = scaleX * LX / ((x_max - x_min) / uX);														// 
+		float dY = scaleY * LY / ((y_max - y_min) / uY);														// Dlugosc jednej dzialki
+
+		iloscPodzialekX = int((x_max - x_min) / uX / scaleX);
+		int count_x = -(int(axisOrigin.x / dX));
 
 		sf::VertexArray* podzX = new sf::VertexArray[iloscPodzialekX + 1];										// Rysowanie podzialek na osi X
 		sf::Text* eX = new sf::Text[iloscPodzialekX + 1];														// 
@@ -144,19 +144,21 @@ int main()
 		for (int i = 0; i <= iloscPodzialekX; i++)																// 
 		{																										// 
 			(podzX + i)->setPrimitiveType(sf::Lines); 															// 
-			(podzX + i)->append(sf::Vector2f(axisOrigin.x + (float)xpmin * dX, axisOrigin.y));					// 
-			(podzX + i)->append(sf::Vector2f(axisOrigin.x + (float)xpmin * dX, axisOrigin.y + 10.0f));			// 
+			(podzX + i)->append(sf::Vector2f(axisOrigin.x + count_x * dX, axisOrigin.y));						// 
+			(podzX + i)->append(sf::Vector2f(axisOrigin.x + count_x * dX, axisOrigin.y + 10.0f));				// 
 
-			(eX + i)->setString(std::to_string(int(xpmin * uX * 180/M_PI)));									// 
+			(eX + i)->setString(std::to_string(count_x * uX * 180 / M_PI));										// 
 			(eX + i)->setFont(czcionka);																		// 
 			(eX + i)->setCharacterSize(12);																		// 
-			(eX + i)->setPosition(sf::Vector2f(axisOrigin.x + (float)xpmin * dX, axisOrigin.y + 15.0f));		// 
+			(eX + i)->setPosition(sf::Vector2f(axisOrigin.x + count_x * dX, axisOrigin.y + 15));				// 
 
 			window.draw(*(podzX + i));																			// 
 			window.draw(*(eX + i));																				// 
-			xpmin++;																							// 
+			count_x++;
 		}
 
+		iloscPodzialekY = int(LY/dY);  std::cout << iloscPodzialekY << " | " << scaleY << '\n';
+		int count_y = int(axisOrigin.y / dY);
 
 		sf::VertexArray* podzY = new sf::VertexArray[iloscPodzialekY + 1];										// Rysowanie podzialek na osi Y
 		sf::Text* eY = new sf::Text[iloscPodzialekY + 1];														// 
@@ -164,30 +166,30 @@ int main()
 		for (int i = 0; i <= iloscPodzialekY; i++)																// 
 		{																										// 
 			(podzY + i)->setPrimitiveType(sf::Lines);															// 
-			(podzY + i)->append(sf::Vector2f(axisOrigin.x, axisOrigin.y - ypmax * dY));							// 
-			(podzY + i)->append(sf::Vector2f(axisOrigin.x + 10.f, axisOrigin.y - ypmax * dY));					// 
+			(podzY + i)->append(sf::Vector2f(axisOrigin.x, axisOrigin.y - dY * count_y));						// 
+			(podzY + i)->append(sf::Vector2f(axisOrigin.x + 10.0f, axisOrigin.y - dY * count_y));				// 
 
-			(eX + i)->setString(std::to_string(ypmax));															// 
-			(eX + i)->setFont(czcionka);																		// 
-			(eX + i)->setCharacterSize(12);																		// 
-			(eX + i)->setPosition(sf::Vector2f(axisOrigin.x + 15, axisOrigin.y - ypmax * dY));					// 
+			(eY + i)->setString(std::to_string(count_y * uY));													// 
+			(eY + i)->setFont(czcionka);																		// 
+			(eY + i)->setCharacterSize(12);																		// 
+			(eY + i)->setPosition(sf::Vector2f(axisOrigin.x + 15, axisOrigin.y - dY * count_y));				// 
 
 			window.draw(*(podzY + i));																			// 
-			window.draw(*(eX + i));																				// 
-			ypmax--;																							// 
+			window.draw(*(eY + i));																				// 
+			count_y--;
 		}
 
 			int fmax = 20;
 		for (int i = 0; i < resX; i++)																			// Rysowanie wykresu punkt po punkcie
 		{
-			x = 4.f * M_PI * (float(i) - axisOrigin.x) / ((float(resX) - 2* margX) + (float)scaleX);
-			y = sin(x);
+			x = (x_max - x_min) * (float(i) - axisOrigin.x) / (scaleX * LX);
+			y = sin(x * sin(2 * x));
 			
 			//y = y = sin((2 * M_PI / ((1 - 1 / fmax) * x + 2 * M_PI / fmax)) * x) * (2 * M_PI / ((1 - 1 / fmax) * x + 2 * M_PI / fmax)) / fmax;				// Formula do wyswietlenia
 
 			(xy + i) -> setRadius(1);
 			(xy + i) -> setFillColor(sf::Color::Red);
-			(xy + i) -> setPosition(sf::Vector2f((float)i, -dY * y + axisOrigin.y));
+			(xy + i) -> setPosition(sf::Vector2f((float)i, -dY * y / uY + axisOrigin.y));
 			window.draw(*(xy + i));
 		}
 
@@ -195,7 +197,7 @@ int main()
 
 		std::cout << "Przeciecie ukladu wspolrzednych" << "\t\t" << '\n';
 		std::cout << "x: " << axisOrigin.x << "\ty: " << axisOrigin.y << '\n';
-		std::cout << "Skala X: " << scaleX << ", Skala Y: " << scaleY << '\n';
+		std::cout << "Skala X: " << /*scaleX <<*/ ", Skala Y: " << scaleY << '\n';
 
 		delete[] podzX;
 		delete[] podzY;
