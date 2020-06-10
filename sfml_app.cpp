@@ -3,9 +3,13 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 
+
+
 int main()
 {
-	const int resX{ 1920 }, resY{ 1080 };																			// Deklaracja rozdzielczosci
+	int desktop_h = sf::VideoMode::getDesktopMode().height;															// Pobieranie biezacej rozdzielczosci
+	int desktop_w = sf::VideoMode::getDesktopMode().width;															// Pobieranie biezacej rozdzielczosci
+	const int resX{ desktop_w }, resY{ desktop_h };																	// Deklaracja rozdzielczosci okna programu
 	float margX{ 20 }, margY{ 20 };																					// Marginesy
 	float LX = resX - 2 * margX, LY = resY - 2 * margY;																// Docelowa dlugosc osi w pikselach
 
@@ -13,23 +17,41 @@ int main()
 	const float M_PI = (float)acos(-1);																				// Definicja stalej PI
 	float x, y;																										// Zmienne do obliczania wykresu
 	int iloscPodzialekX{ 0 }, iloscPodzialekY{ 0 };																	// Liczba podzialek na osi X
-	float uX{ 1 * M_PI }, uY{ 1 };																					// Jednostki osi
-	float x_max{ 4 * M_PI }, y_max{ 2 };																			// Wartosci max osi
-	float x_min{ -1 * M_PI }, y_min{ -2 };																			// Wartosci min osi
+	float uX{ 1 }, uY{ 1 };																							// Jednostki osi
+	float x_max{ 4 }, y_max{ 2 };																					// Wartosci max osi
+	float x_min{ -1 }, y_min{ -2 };																					// Wartosci min osi
 
 
-	sf::Vector2f axisOrigin{ -x_min * LX / (x_max-x_min) + margX, y_max * LY / (y_max - y_min) + margY };							// Punkt skrzyzowania osi
+	sf::Vector2f axisOrigin{ -x_min * LX / (x_max-x_min) + margX, y_max * LY / (y_max - y_min) + margY };			// Punkt skrzyzowania osi
 	float scaleY{ 1 }, scaleX{ 1 };																					// Wspolczynniki skalowania
 
-
-	bool pokaz_kolko{ false };																						// Przelacznik widocznosci kolka
-
+	sf::Color kolor_osi(150, 150, 150);
 
 	sf::Font czcionka;
 		czcionka.loadFromFile("C:\\Windows\\Fonts\\Arial.ttf");
 
-	sf::Color kolor_osi(150, 150, 150);
-	
+	bool pokaz_kolko{ false };																						// Przelacznik widocznosci kolka
+
+
+/////////// Dzwiek /////////////////////////////////////////////////
+
+	std::vector<std::string> devices = sf::SoundRecorder::getAvailableDevices();
+
+	for (int i = 0; i < devices.size(); i++) std::cout << devices[i] << '\n';
+
+
+	sf::SoundBuffer bufor;
+
+	if (!bufor.loadFromFile("res\\qqq.wav")) std::cout << "Plik nie zostal wczytany!" << '\n';
+	std::cout << bufor.getSampleCount();
+	bufor.getSamples();
+
+	sf::Sound dzwiek;
+	dzwiek.setBuffer(bufor);
+	dzwiek.play();
+
+
+///////////////// Ekran //////////////////////////////////////////
 
 	sf::ContextSettings settings;																					// Ustawienie antyaliasingu
 		settings.antialiasingLevel = 16;
@@ -45,7 +67,6 @@ int main()
 
 	sf::CircleShape* punkty = new sf::CircleShape[resX]; 
 	sf::CircleShape* xy = punkty;
-
 
 
 	////////////////////////////////////////////////////////////////////////////////////////
@@ -135,11 +156,11 @@ int main()
 		float dY = scaleY * LY / ((y_max - y_min) / uY);														// Dlugosc jednej dzialki
 
 		iloscPodzialekX = int((x_max - x_min) / uX / scaleX);
-		if (dX < 100)
+		/*if (dX < 100)
 		{
 			iloscPodzialekX /= 2;
 			uX *= 4;
-		}
+		}*/
 
 		int count_x = -(int(axisOrigin.x / dX));
 
@@ -153,7 +174,7 @@ int main()
 			(podzX + i)->append(sf::Vector2f(axisOrigin.x + count_x * dX, axisOrigin.y + 10.0f));				// 
 			podzX[i][0].color = podzX[i][1].color = kolor_osi;
 
-			(eX + i)->setString(std::to_string(int(count_x * uX * 180 / M_PI)));								// 
+			(eX + i)->setString(std::to_string(int(count_x * uX)));												// 
 			(eX + i)->setFont(czcionka);																		// 
 			(eX + i)->setCharacterSize(12);																		// 
 			(eX + i)->setPosition(sf::Vector2f(axisOrigin.x + count_x * dX, axisOrigin.y + 15));				// 
@@ -192,7 +213,7 @@ int main()
 		for (int i = 0; i < resX; i++)																			// Rysowanie wykresu punkt po punkcie
 		{
 			x = (x_max - x_min) * (float(i) - axisOrigin.x) / (scaleX * LX);
-			y = sin(x * sin(2 * x));
+			y = sin(x);
 			
 			//y = y = sin((2 * M_PI / ((1 - 1 / fmax) * x + 2 * M_PI / fmax)) * x) * (2 * M_PI / ((1 - 1 / fmax) * x + 2 * M_PI / fmax)) / fmax;				// Formula do wyswietlenia
 
@@ -204,8 +225,7 @@ int main()
 
 		window.display();
 
-		//std::cout << "Przeciecie ukladu wspolrzednych" << "\t\t" << '\n';
-		//std::cout << "x: " << axisOrigin.x << "\ty: " << axisOrigin.y << '\n';
+		//std::cout << "Przeciecie ukladu wspolrzednych: x=" << axisOrigin.x << "\ty=" << axisOrigin.y << '\n';
 		//std::cout << "Skala X: " << /*scaleX <<*/ ", Skala Y: " << scaleY << '\n';
 
 		delete[] podzX;
