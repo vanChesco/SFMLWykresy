@@ -159,7 +159,7 @@ int main()
 		float dX = LX / (dzielnik);																				// 
 		float dY = scaleY * LY / ((y_max - y_min) / uY);														// Dlugosc jednej dzialki
 
-		if (iloscPodzialekX > 30)
+		if (dX < 100)
 		{
 			iloscPodzialekX /= 2;
 			dX *= 2;
