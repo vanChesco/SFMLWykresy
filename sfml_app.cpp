@@ -152,10 +152,18 @@ int main()
 		window.draw(osX); window.draw(osY);
 		window.draw(grotX); window.draw(grotY);
 
-		float dX = scaleX * LX / ((x_max - x_min) / uX);														// 
+		float dzielnik = ((x_max - x_min) / uX / scaleX);
+		iloscPodzialekX = int(dzielnik);
+
+
+		float dX = LX / (dzielnik);																				// 
 		float dY = scaleY * LY / ((y_max - y_min) / uY);														// Dlugosc jednej dzialki
 
-		iloscPodzialekX = int((x_max - x_min) / uX / scaleX);
+		if (iloscPodzialekX > 30)
+		{
+			iloscPodzialekX /= 2;
+			dX *= 2;
+		}
 		/*if (dX < 100)
 		{
 			iloscPodzialekX /= 2;
@@ -169,16 +177,16 @@ int main()
 
 		for (int i = 0; i <= iloscPodzialekX; i++)																// 
 		{																										// 
-			(podzX + i)->setPrimitiveType(sf::Lines); 															// 
-			(podzX + i)->append(sf::Vector2f(axisOrigin.x + count_x * dX, axisOrigin.y));						// 
-			(podzX + i)->append(sf::Vector2f(axisOrigin.x + count_x * dX, axisOrigin.y + 10.0f));				// 
-			podzX[i][0].color = podzX[i][1].color = kolor_osi;
+			(podzX + i) -> setPrimitiveType(sf::Lines); 														// 
+			(podzX + i) -> append(sf::Vector2f(axisOrigin.x + count_x * dX, axisOrigin.y));						// 
+			(podzX + i) -> append(sf::Vector2f(axisOrigin.x + count_x * dX, axisOrigin.y + 10.0f));				// 
+			podzX[i][0].color = podzX[i][1].color = kolor_osi;													//
 
-			(eX + i)->setString(std::to_string(int(count_x * uX)));												// 
-			(eX + i)->setFont(czcionka);																		// 
-			(eX + i)->setCharacterSize(12);																		// 
-			(eX + i)->setPosition(sf::Vector2f(axisOrigin.x + count_x * dX, axisOrigin.y + 15));				// 
-			(eX + i)->setFillColor(kolor_osi);
+			(eX + i) -> setString(std::to_string(int(count_x * uX)));											// 
+			(eX + i) -> setFont(czcionka);																		// 
+			(eX + i) -> setCharacterSize(12);																	// 
+			(eX + i) -> setPosition(sf::Vector2f(axisOrigin.x + count_x * dX, axisOrigin.y + 15));				// 
+			(eX + i) -> setFillColor(kolor_osi);																//
 
 			window.draw(*(podzX + i));																			// 
 			window.draw(*(eX + i));																				// 
@@ -193,16 +201,16 @@ int main()
 
 		for (int i = 0; i <= iloscPodzialekY; i++)																// 
 		{																										// 
-			(podzY + i)->setPrimitiveType(sf::Lines);															// 
-			(podzY + i)->append(sf::Vector2f(axisOrigin.x, axisOrigin.y - dY * count_y));						// 
-			(podzY + i)->append(sf::Vector2f(axisOrigin.x + 10.0f, axisOrigin.y - dY * count_y));				// 
-			podzY[i][0].color = podzY[i][1].color = kolor_osi;
+			(podzY + i) -> setPrimitiveType(sf::Lines);															// 
+			(podzY + i) -> append(sf::Vector2f(axisOrigin.x, axisOrigin.y - dY * count_y));						// 
+			(podzY + i) -> append(sf::Vector2f(axisOrigin.x + 10.0f, axisOrigin.y - dY * count_y));				// 
+			podzY[i][0].color = podzY[i][1].color = kolor_osi;													//
 
-			(eY + i)->setString(std::to_string((count_y * uY)));												// 
-			(eY + i)->setFont(czcionka);																		// 
-			(eY + i)->setCharacterSize(12);																		// 
-			(eY + i)->setPosition(sf::Vector2f(axisOrigin.x + 15, axisOrigin.y - dY * count_y));				// 
-			(eY + i)->setFillColor(kolor_osi);
+			(eY + i) -> setString(std::to_string((count_y * uY)));												// 
+			(eY + i) -> setFont(czcionka);																		// 
+			(eY + i) -> setCharacterSize(12);																	// 
+			(eY + i) -> setPosition(sf::Vector2f(axisOrigin.x + 15, axisOrigin.y - dY * count_y));				// 
+			(eY + i) -> setFillColor(kolor_osi);																//
 
 			window.draw(*(podzY + i));																			// 
 			window.draw(*(eY + i));																				// 
